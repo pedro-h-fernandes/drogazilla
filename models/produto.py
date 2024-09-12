@@ -20,6 +20,7 @@ class ProdutoDAO:
         valores = (produto.nome, produto.descricao, produto.preco, produto.custo, produto.quantidade_estoque)
         cursor.execute(sql_insert, valores)
         self.db.conexao.commit()
+        print('listei produtos')
         print("Produto inserido com sucesso!")
         return cursor.lastrowid
 
