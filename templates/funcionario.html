@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleHomePage.css') }}">
+    <title>Funcionario</title>
+</head>
+<body>
+    <main>
+        <nav>
+            <div class="logo">
+                <h1>DROGAZILLA</h1>
+            </div>
+            <div class="links">
+                <a href="#">Produtos</a>
+                <a href="#">Produtos</a>
+                <a href="#">Produtos</a>
+                <a href="#">Produtos</a>
+
+            </div>
+            <div class="user">
+                <p>Olá, seja bem vindo:</p>
+                <p>{{ session['username'] }}</p>
+                <p>cpf: {{ session['cpf'] }} </p>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </nav>
+        <section class="funcões">
+            <div class="cadastrar_produto">
+                <h1>Cadastrar produto</h1>
+            </div>
+            <div class="formulario">
+                <form action="{{ url_for('funcionario') }}" method="POST">
+                    <label for="Nome_produto">Nome do Produto:</label>
+                    <input type="text" id="Nome_produto" name="Nome_produto" required><br>
+        
+                    <label for="descricao">Descrição:</label>
+                    <input type="text" id="descricao" name="descricao" required><br>
+        
+                    <label for="valor_custo">Valor de custo:</label>
+                    <input type="text" id="valor_custo" name="valor_custo" required><br>
+        
+                    <label for="valor_venda">Valor de venda:</label>
+                    <input type="text" id="valor_venda" name="valor_venda" required><br>
+        
+                    <label for="id_fornecedor">id fornecedor:</label>
+                    <input type="text" id="id_fornecedor" name="id_fornecedor" required><br>
+        
+                    <input type="submit" value="Cadastrar">
+
+        
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

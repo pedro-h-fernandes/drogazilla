@@ -1,0 +1,118 @@
+/* Reset some basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Background color for the whole page */
+body {
+    background-color: #000; /* Black */
+    color: #dda0dd; /* Purple */
+}
+
+/* Main navigation styling */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #333; /* Dark gray */
+}
+
+/* Logo styling */
+.logo h1 {
+    color: #dda0dd; /* Purple */
+}
+
+/* Navigation links styling */
+.links a {
+    color: #dda0dd; /* Purple */
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+}
+
+.links a:hover {
+    color: #ffd700; /* Gold */
+}
+
+/* User information styling */
+.user p {
+    margin: 5px 0;
+}
+
+.user a {
+    color: #dda0dd; /* Purple */
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.user a:hover {
+    color: #ffd700; /* Gold */
+}
+
+/* Section for products */
+.produtos {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.produtos h2 {
+    color: #dda0dd; /* Purple */
+    margin-bottom: 20px;
+}
+
+/* Card box styling */
+.card_box {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Individual card styling */
+.card_img {
+    background-color: #ffd700; /* Gold */
+    border-radius: 8px;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.card_img:hover {
+    transform: scale(1.05);
+}
+
+.card_img img {
+    width: 100%;
+    height: auto;
+}
+
+.card_body {
+    padding: 15px;
+}
+
+/* Product title and price */
+.card_body h5 {
+    color: #4b0082; /* Dark Purple */
+    margin: 10px 0;
+}
+
+/* Buy button */
+.card_body a {
+    display: inline-block;
+    background-color: #4b0082; /* Dark Purple */
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.card_body a:hover {
+    background-color: #dda0dd; /* Lighter purple */
+}
