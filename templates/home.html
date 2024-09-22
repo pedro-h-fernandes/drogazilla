@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styleHomePage.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .carousel-item img {
+            height: 600px; 
+            object-fit: cover; 
+        }
+    </style>
     <title>Página Inicial</title>
 </head>
 <body>
@@ -16,7 +23,7 @@
                 <a href="#">Produtos</a>
                 <a href="#">Produtos</a>
                 <a href="#">Produtos</a>
-                <a href="#">Produtos</a>
+                <a href="{{ url_for('carrinho') }}">Carrinho</a>
 
             </div>
             <div class="user">
@@ -26,22 +33,48 @@
                 <a href="{{ url_for('logout') }}">Logout</a>
             </div>
         </nav>
-        <section class="produtos">
-            <h2>Confira nossos produtos</h2>
-           <div class="card_box">
-            {% for i in range(1, 10) %}
+        <section class = "slider"> 
+            <div id="carouselExample" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for image in images %}
+                        <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                            <img src="{{ url_for('static', filename=image) }}" class="d-block w-100" alt="Imagem {{ loop.index }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+                </div>
+            </div>
+       </section>
+       <section class="produtos">
+        <h2>Confira nossos produtos</h2>
+        <div class="card_box">
+            {% for produto in produtos %}
             <div class="card_img">
                 <img src="{{ url_for('static', filename='dipirona.png') }}" alt="imagem">
                 <div class="card_body">
-                    <h5>{{produtos[i][1]}}</h5>
-                    <h5>{{produtos[i][2]}}</h5>
-                    <a href="#">comprar</a>
+                    <h5>{{ produto[1] }}</h5>
+                    <h5>{{ produto[2] }}</h5>
+                    <form action="{{ url_for('adicionar_ao_carrinho', produto_id=produto[0]) }}" method="POST">
+                        <input type="number" name="quantidade" value="1" min="1" />
+                        <button type="submit">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
-           </div>
-           {% endfor %}
-        </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
     </main>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
 </body>
 </html>

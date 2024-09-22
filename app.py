@@ -14,7 +14,7 @@ class Database:
                 host = "localhost",
                 database = "farmacia",
                 user = "root",
-                password = "root753"
+                password = "1234"
             )
             if self.conexao.is_connected():
                 print("conectado ao servidor")
@@ -38,7 +38,19 @@ class Database:
             cursor.execute(sql_insert, valores)
             self.conexao.commit()
             print("Commit efetuado com sucesso")
-
+            
+    def salva_pedido(self, pedido):
+        if self.conexao.is_connected():
+            cursor = self.conexao.cursor()
+            sql_insert = (
+                "INSERT INTO pedido (id_cliente, id_produto, quantidade) "
+                "VALUES (%s, %s, %s)"
+            )
+            valores = (pedido.id_cliente, pedido.id_produto, pedido.quantidade)
+            cursor.execute(sql_insert, valores)
+            self.conexao.commit()
+            print("Pedido salvo com sucesso!")
+            
     def cadastraFuncionario(self, funcionario):
         if self.conexao.is_connected():
             cursor = self.conexao.cursor()
@@ -129,33 +141,45 @@ class Database:
             resultados = cursor.fetchall()
             cursor.close()
             return resultados
-            
-#funcionario           
-def cadastraFuncionario(self, funcionario):
-    if self.conexao.is_connected():
-        cursor = self.conexao.cursor()
-        sql_insert = (
-            "INSERT INTO funcionario (username, password, email, cpf, telefone, endereco, data_nascimento) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        )
-        valores = (funcionario.username, funcionario.password, funcionario.email, funcionario.cpf, funcionario.telefone, funcionario.endereco, funcionario.data_nascimento)
-        cursor.execute(sql_insert, valores)
-        self.conexao.commit()
-        print("Commit efetuado com sucesso")
         
-#fornecedor
-def cadastraFornecedor(self, fornecedor):
-    if self.conexao.is_connected():
-        cursor = self.conexao.cursor()
-        sql_insert = (
-            "INSERT INTO fornecedor (username, password, email, cnpj, telefone, endereco) "
-            "VALUES (%s, %s, %s, %s, %s, %s)"
-        )
-        valores = (fornecedor.username, fornecedor.password, fornecedor.email, fornecedor.cnpj, fornecedor.telefone, fornecedor.endereco)
-        cursor.execute(sql_insert, valores)
-        self.conexao.commit()
-        print("Commit efetuado com sucesso")
+    def lista_ultimos_pedidos(self):
+        if self.conexao.is_connected():
+            cursor = self.conexao.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM pedido ORDER BY id DESC LIMIT 10;")  # Ajuste a consulta conforme necessário
+            return cursor.fetchall()            
+    #funcionario           
+    def cadastraFuncionario(self, funcionario):
+        if self.conexao.is_connected():
+            cursor = self.conexao.cursor()
+            sql_insert = (
+                "INSERT INTO funcionario (username, password, email, cpf, telefone, endereco, data_nascimento) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            )
+            valores = (funcionario.username, funcionario.password, funcionario.email, funcionario.cpf, funcionario.telefone, funcionario.endereco, funcionario.data_nascimento)
+            cursor.execute(sql_insert, valores)
+            self.conexao.commit()
+            print("Commit efetuado com sucesso")
             
+    #fornecedor
+    def cadastraFornecedor(self, fornecedor):
+        if self.conexao.is_connected():
+            cursor = self.conexao.cursor()
+            sql_insert = (
+                "INSERT INTO fornecedor (username, password, email, cnpj, telefone, endereco) "
+                "VALUES (%s, %s, %s, %s, %s, %s)"
+            )
+            valores = (fornecedor.username, fornecedor.password, fornecedor.email, fornecedor.cnpj, fornecedor.telefone, fornecedor.endereco)
+            cursor.execute(sql_insert, valores)
+            self.conexao.commit()
+            print("Commit efetuado com sucesso")
+
+    def lista_ultimos_pedidos(self):
+        if self.conexao.is_connected():
+            cursor = self.conexao.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM pedido ORDER BY id DESC LIMIT 10;")  
+            resultados = cursor.fetchall()
+            cursor.close()
+            return resultados   
 class Cliente:
     def __init__(self, username: str, password: str, email: str, cpf: str, telefone: str, endereco: str) -> None:
         self.__id: int = None  
@@ -296,16 +320,43 @@ class Pedido:
 db = Database()
 @app.route('/')
 def index():
+    images = [
+        'images/1.jpeg',
+        'images/2.jpeg',
+        'images/3.jpeg'
+    ]
     produto = Database().lista_produtos()
-    return render_template('index.html', produtos = produto)
+    return render_template('index.html', produtos = produto, images=images)
+
+@app.route('/pedidos')
+def pedidos():
+    pedidos = db.lista_ultimos_pedidos()  
+    return render_template('pedidos.html', pedidos=pedidos)
 
 @app.route('/home')
 def home():
+    
     if 'username' not in session:
         flash('Você deve estar logado para acessar esta página.')
         return redirect(url_for('login'))
+    images = [
+        'images/1.jpeg',
+        'images/2.jpeg',
+        'images/3.jpeg'
+    ]    
+    if 'carrinho' not in session:
+        session['carrinho'] = []
+        
     produto = Database().lista_produtos()
-    return render_template('home.html', produtos = produto)
+    return render_template('home.html', produtos = produto,  images=images)
+
+@app.route('/carrinho')
+def carrinho():
+    return render_template('carrinho.html', carrinho=session.get('carrinho', []), db=db)
+
+@app.context_processor
+def inject_db():
+    return dict(db=db)
 
 @app.route('/logout')
 def logout():
@@ -314,7 +365,65 @@ def logout():
     flash('Você foi desconectado!')
     return redirect(url_for('login'))
 
+@app.route('/remover_do_carrinho/<int:produto_id>', methods=['POST'])
+def remover_do_carrinho(produto_id):
+    if 'carrinho' in session:
+        session['carrinho'] = [item for item in session['carrinho'] if item['id_produto'] != produto_id]
+        session.modified = True  # Marca a sessão como modificada
+        flash('Produto removido do carrinho!')
+    return redirect(url_for('carrinho'))
 
+@app.route('/adicionar_ao_carrinho/<int:produto_id>', methods=['POST'])
+def adicionar_ao_carrinho(produto_id):
+    quantidade = request.form.get('quantidade', 1, type=int)
+    
+    # Busca informações do produto
+    produto = db.consultaProdutoPorID(produto_id)
+    
+    if produto:
+        # Cria um item de carrinho
+        item = {
+            'id_produto': produto_id,
+            'quantidade': quantidade
+        }
+        
+        # Adiciona ao carrinho
+        session['carrinho'].append(item)
+        flash('Produto adicionado ao carrinho com sucesso!')
+    else:
+        flash('Produto não encontrado!')
+
+    return redirect(url_for('home'))
+
+@app.route('/finalizar_compra', methods=['GET', 'POST'])
+def finalizar_compra():
+    if request.method == 'POST':
+        if 'carrinho' not in session or not session['carrinho']:
+            flash('Carrinho vazio! Adicione produtos antes de finalizar a compra.')
+            return redirect(url_for('home'))
+
+        # Obtém o ID do cliente baseado no CPF
+        cpf_cliente = session.get('cpf')
+        cursor = db.conexao.cursor()
+        cursor.execute("SELECT id FROM cliente WHERE cpf = %s", (cpf_cliente,))
+        cliente = cursor.fetchone()
+
+        if not cliente:
+            flash('Cliente não encontrado!')
+            return redirect(url_for('home'))
+
+        id_cliente = cliente[0]  # Obtém o ID do cliente
+
+        # Salva cada item do carrinho como um pedido
+        for item in session['carrinho']:
+            pedido = Pedido(id_cliente, item['id_produto'], item['quantidade'])
+            db.salva_pedido(pedido)
+
+        session.pop('carrinho', None)  # Limpa o carrinho
+        flash('Compra finalizada com sucesso!')
+        return redirect(url_for('home'))
+
+    return render_template('finalizar_compra.html', carrinho=session.get('carrinho', []))
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
@@ -344,6 +453,7 @@ def cadastro():
 
 @app.route('/funcionario', methods=['GET', 'POST'])
 def funcionario():
+    produtos = db.lista_produtos()  
     if request.method == 'POST':
         Nome_produto = request.form['Nome_produto']
         descricao = request.form['descricao']
@@ -357,8 +467,7 @@ def funcionario():
         flash('Cadastro realizado com sucesso!')
         
         return redirect(url_for('funcionario')) 
-    return render_template('funcionario.html')
-
+    return render_template('funcionario.html', produtos=produtos)
 
 
 @app.route('/login', methods=['GET', 'POST'])
