@@ -77,45 +77,13 @@ O sistema de e-commerce da farmácia Drogazilla permite que os usuários cadastr
 
 ---
 
-## **7. Integrações**
-### 7.1 Gateways de Pagamento
-Descrição das integrações com gateways de pagamento como Stripe, PayPal, e outros métodos.
-
-### 7.2 APIs Externas
-Integrações com APIs de serviços de entrega, plataformas de marketing e sistemas de recomendação de produtos.
-
----
-
-## **8. Segurança**
-### 8.1 Políticas de Segurança
-- **Autenticação**: Implementação de autenticação via OAuth 2.0 e JWT.
-- **Autorização**: Controle de permissões com base no nível de acesso do usuário.
-- **Criptografia**: Senhas armazenadas com hashing e criptografia SSL em todas as transações sensíveis.
-
-### 8.2 Vulnerabilidades Conhecidas e Soluções
-Lista de vulnerabilidades comuns (SQL Injection, XSS, CSRF) e as medidas de prevenção adotadas.
-
----
-
-## **9. Testes**
-### 9.1 Testes Unitários
-Descrição dos principais testes unitários implementados para validação das funcionalidades.
-
-### 9.2 Testes de Integração
-Testes para verificar a integração entre diferentes módulos, como o processamento de pagamentos e a atualização do inventário.
-
-### 9.3 Testes de Segurança
-Testes focados em vulnerabilidades como tentativas de SQL injection e ataques XSS.
-
----
-
-## **10. Guia de Instalação**
+## **7. Guia de Instalação**
 ### 10.1 Pré-requisitos
 - Node.js (versão X.X.X)
 - MongoDB
 - Redis
 
-### 10.2 Passo a Passo
+### 7.2 Passo a Passo
 1. Clone o repositório.
 2. Instale as dependências com `npm install`.
 3. Configure as variáveis de ambiente.
@@ -124,25 +92,25 @@ Testes focados em vulnerabilidades como tentativas de SQL injection e ataques XS
 
 ---
 
-## **11. Manual do Usuário**
-### 11.1 Visão Geral
+## **8. Manual do Usuário**
+### 8.1 Visão Geral
 Fornecer uma explicação passo a passo de como os usuários podem navegar no site, adicionar produtos ao carrinho, finalizar compras e acompanhar pedidos.
 
-### 11.2 Tela de Administração
+### 8.2 Tela de Administração
 Explicar as funcionalidades disponíveis para administradores: adição de novos produtos, gerenciamento de pedidos e modificação de usuários.
 
 ---
 
-## **12. Manutenção e Suporte**
-### 12.1 Atualizações
+## **9. Manutenção e Suporte**
+### 9.1 Atualizações
 Instruções sobre como aplicar atualizações de segurança e melhorias de performance.
 
-### 12.2 Solução de Problemas
+### 9.2 Solução de Problemas
 Lista de problemas comuns e suas soluções (ex: problemas de login, erros de pagamento, falhas de integração com APIs).
 
 ---
 
 ## **13. Anexos**
 - **Diagrama ER**
-- **Exemplos de Chamadas de API**
-- **Políticas de Backup e Recuperação**
+- **Diagrama de caso de uso**
+
